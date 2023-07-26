@@ -1,9 +1,13 @@
 /*
   Warnings:
 
-  - You are about to drop the column `create_at` on the `users` table. All the data in the column will be lost.
+  - A unique constraint covering the columns `[email]` on the table `users` will be added. If there are existing duplicate values, this will fail.
 
 */
+-- AlterTable
+ALTER TABLE "users" ADD COLUMN "avatar_url" TEXT;
+ALTER TABLE "users" ADD COLUMN "email" TEXT;
+
 -- CreateTable
 CREATE TABLE "accounts" (
     "id" TEXT NOT NULL PRIMARY KEY,
@@ -30,26 +34,11 @@ CREATE TABLE "sessions" (
     CONSTRAINT "sessions_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- RedefineTables
-PRAGMA foreign_keys=OFF;
-CREATE TABLE "new_users" (
-    "id" TEXT NOT NULL PRIMARY KEY,
-    "username" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "email" TEXT,
-    "avatar_url" TEXT,
-    "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-INSERT INTO "new_users" ("id", "name", "username") SELECT "id", "name", "username" FROM "users";
-DROP TABLE "users";
-ALTER TABLE "new_users" RENAME TO "users";
-CREATE UNIQUE INDEX "users_username_key" ON "users"("username");
-CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
-PRAGMA foreign_key_check;
-PRAGMA foreign_keys=ON;
-
 -- CreateIndex
 CREATE UNIQUE INDEX "accounts_provider_provider_account_id_key" ON "accounts"("provider", "provider_account_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "sessions_session_token_key" ON "sessions"("session_token");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_email_key" ON "users"("email");

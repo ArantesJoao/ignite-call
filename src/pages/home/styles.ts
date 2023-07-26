@@ -7,7 +7,6 @@ export const Container = styled('div', {
   display: 'flex',
   alignItems: 'center',
   gap: '$20',
-  overflow: 'hidden',
 })
 
 export const Hero = styled('div', {
@@ -21,7 +20,7 @@ export const Hero = styled('div', {
   },
 
   [`> ${Text}`]: {
-    marginTop: '$2',
+    maskType: '$2',
     color: '$gray200',
   },
 })

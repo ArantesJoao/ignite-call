@@ -1,22 +1,22 @@
-import { Button, TextInput, Text } from '@ignite-ui/react'
+import { Button, Text, TextInput } from '@ignite-ui/react'
 import { ArrowRight } from 'phosphor-react'
-import { Form, FormAnnotation } from './styles'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import { Form, FormAnnotation } from './styles'
 import { useRouter } from 'next/router'
 
-const claimUsernameFormSchema = z.object({
+const ClaimUsernameFormSchema = z.object({
   username: z
     .string()
-    .min(3, { message: 'Please use at least 3 letters!' })
+    .min(3, { message: 'O usuário precisa ter pelo menos 3 letras.' })
     .regex(/^([a-z\\-]+)$/i, {
-      message: 'Please use only letters and hyphens!',
+      message: 'O usuário pode ter apenas letras e hifens.',
     })
     .transform((username) => username.toLowerCase()),
 })
 
-type ClaimUsernameFormData = z.infer<typeof claimUsernameFormSchema>
+type ClaimUsernameFormData = z.infer<typeof ClaimUsernameFormSchema>
 
 export function ClaimUsernameForm() {
   const {
@@ -24,7 +24,7 @@ export function ClaimUsernameForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<ClaimUsernameFormData>({
-    resolver: zodResolver(claimUsernameFormSchema),
+    resolver: zodResolver(ClaimUsernameFormSchema),
   })
 
   const router = useRouter()
@@ -32,7 +32,7 @@ export function ClaimUsernameForm() {
   async function handleClaimUsername(data: ClaimUsernameFormData) {
     const { username } = data
 
-    await router.push(`/register?username=${username}`)
+    router.push(`/register?username=${username}`)
   }
 
   return (
@@ -41,17 +41,20 @@ export function ClaimUsernameForm() {
         <TextInput
           size="sm"
           prefix="ignite.com/"
-          placeholder="your-username"
+          placeholder="seu-usuário"
           {...register('username')}
         />
         <Button size="sm" type="submit" disabled={isSubmitting}>
-          Claim user
+          Reservar
           <ArrowRight />
         </Button>
       </Form>
+
       <FormAnnotation>
         <Text size="sm">
-          {errors.username ? errors.username.message : 'Tell us your username!'}
+          {errors.username
+            ? errors.username.message
+            : 'Digite o nome do usuário desejado'}
         </Text>
       </FormAnnotation>
     </>

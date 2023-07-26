@@ -1,13 +1,14 @@
-import { ArrowRight } from 'phosphor-react'
-import { Container, Form, FormError, Header } from './styles'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Heading, MultiStep, Text, TextInput } from '@ignite-ui/react'
+import { AxiosError } from 'axios'
+import { useRouter } from 'next/router'
+import { ArrowRight } from 'phosphor-react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
-import { api } from '@/lib/axios'
-import { AxiosError } from 'axios'
+import { api } from '../../lib/axios'
+
+import { Container, Form, FormError, Header } from './styles'
 
 const registerFormSchema = z.object({
   username: z
@@ -44,8 +45,8 @@ export default function Register() {
   async function handleRegister(data: RegisterFormData) {
     try {
       await api.post('/users', {
-        username: data.username,
         name: data.name,
+        username: data.username,
       })
 
       await router.push('/register/connect-calendar')
@@ -55,7 +56,7 @@ export default function Register() {
         return
       }
 
-      console.log(err)
+      console.error(err)
     }
   }
 
@@ -69,34 +70,35 @@ export default function Register() {
         </Text>
 
         <MultiStep size={4} currentStep={1} />
-
-        <Form as="form" onSubmit={handleSubmit(handleRegister)}>
-          <label>
-            <Text size="sm">Username</Text>
-            <TextInput
-              prefix="ignite.com/"
-              placeholder="your-username"
-              {...register('username')}
-            />
-            {errors.username && (
-              <FormError size="sm">{errors.username.message}</FormError>
-            )}
-          </label>
-
-          <label>
-            <Text size="sm">Full name</Text>
-            <TextInput placeholder="Your name" {...register('name')} />
-            {errors.name && (
-              <FormError size="sm">{errors.name.message}</FormError>
-            )}
-          </label>
-
-          <Button type="submit" disabled={isSubmitting}>
-            Next step
-            <ArrowRight />
-          </Button>
-        </Form>
       </Header>
+
+      <Form as="form" onSubmit={handleSubmit(handleRegister)}>
+        <label>
+          <Text size="sm">Username</Text>
+          <TextInput
+            prefix="ignite.com/"
+            placeholder="your-username"
+            {...register('username')}
+          />
+
+          {errors.username && (
+            <FormError size="sm">{errors.username.message}</FormError>
+          )}
+        </label>
+
+        <label>
+          <Text size="sm">Full name</Text>
+          <TextInput placeholder="Your name" {...register('name')} />
+          {errors.name && (
+            <FormError size="sm">{errors.name.message}</FormError>
+          )}
+        </label>
+
+        <Button type="submit" disabled={isSubmitting}>
+          Next step
+          <ArrowRight />
+        </Button>
+      </Form>
     </Container>
   )
 }
