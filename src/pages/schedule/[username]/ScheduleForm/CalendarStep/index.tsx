@@ -11,6 +11,7 @@ import {
 import { useRouter } from 'next/router'
 import { api } from '../../../../../lib/axios'
 import { useQuery } from '@tanstack/react-query'
+import { getDaySuffix } from '../../../../../utils/get-suffix'
 
 interface Availability {
   possibleTimes: number[]
@@ -19,7 +20,6 @@ interface Availability {
 
 export function CalendarStep() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  // const [availability, setAvailability] = useState<Availability | null>(null)
 
   const router = useRouter()
 
@@ -27,8 +27,11 @@ export function CalendarStep() {
   const username = String(router.query.username)
 
   const weekDay = selectedDate ? dayjs(selectedDate).format('dddd') : null
+
+  const dayOfMonth = selectedDate ? dayjs(selectedDate).date() : null
+
   const describedDate = selectedDate
-    ? dayjs(selectedDate).format('MMMM[ ]DD[th]')
+    ? dayjs(selectedDate).format(`MMMM[ ]D[${getDaySuffix(dayOfMonth!)}]`)
     : null
 
   const selectedDateWithoutTime = selectedDate
