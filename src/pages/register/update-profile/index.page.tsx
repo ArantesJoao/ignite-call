@@ -69,7 +69,10 @@ export default function UpdateProfile() {
 
         <label>
           <Text size="sm">About you</Text>
-          <TextArea placeholder="Your name" {...register('bio')} />
+          <TextArea
+            placeholder="Give us a short description of yourself!"
+            {...register('bio')}
+          />
           <FormAnnotation size="sm">
             Talk a little bit about you. This will be shown in your personal
             page.
