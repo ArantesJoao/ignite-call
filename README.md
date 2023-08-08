@@ -44,7 +44,7 @@ You need to create a `.env` file with your Google API credentials and other envi
 ## Usage
 
 1. **Sign in** with your Google account.
-2. **Select** available time slots or propose a new time.
+2. **Select** available time slots.
 3. **Confirm** the appointment.
 4. The booking will be **automatically added to your Google Calendar**.
 
